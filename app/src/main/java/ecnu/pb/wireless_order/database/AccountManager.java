@@ -10,6 +10,7 @@ public class AccountManager {
     private static final String KEY_PASSWORD = "password";
     private static final String KEY_TOKEN = "token";
     private static final String KEY_USER_ID = "user_id";
+    private static final String KEY_USER_NAME = "user_name";
 
     private static SharedPreferences preferences;
 
@@ -17,9 +18,9 @@ public class AccountManager {
         return getSharedPreferences(context).getString(KEY_TOKEN, null) != null;
     }
 
-    public static void signin(Context context, String mobile, String password) {
+    public static void signin(Context context, String name, String password) {
         getSharedPreferences(context).edit()
-                .putString(KEY_MOBILE, mobile)
+                .putString(KEY_USER_NAME, name)
                 .putString(KEY_PASSWORD, password)
                 .putString(KEY_TOKEN, "token")
                 .apply();
@@ -29,8 +30,14 @@ public class AccountManager {
         getSharedPreferences(context).edit()
                 .putString(KEY_MOBILE, mobile)
                 .putString(KEY_PASSWORD, password)
-                .putString(KEY_USER_ID, name)
+                .putString(KEY_USER_NAME, name)
                 .putString(KEY_TOKEN, "token")
+                .apply();
+    }
+
+    public static void setKeyUserId(Context context, int id) {
+        getSharedPreferences(context).edit()
+                .putInt(KEY_USER_ID, id)
                 .apply();
     }
 
@@ -53,8 +60,12 @@ public class AccountManager {
         return getSharedPreferences(context).getString(KEY_PASSWORD, null);
     }
 
+    public static int getKeyUserId(Context context) {
+        return getSharedPreferences(context).getInt(KEY_USER_ID, 0);
+    }
+
     public static String getUserName(Context context) {
-        return getSharedPreferences(context).getString(KEY_USER_ID, null);
+        return getSharedPreferences(context).getString(KEY_USER_NAME, null);
     }
 
     private static SharedPreferences getSharedPreferences(Context context) {

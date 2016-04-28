@@ -12,14 +12,14 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import ecnu.pb.wireless_order.R;
-import ecnu.pb.wireless_order.model.MenuModel;
+import ecnu.pb.wireless_order.model.MealModel;
 
 public class OrderDetailAdapter extends BaseAdapter{
 
     private Context context;
-    private List<MenuModel> list;
+    private List<MealModel> list;
 
-    public OrderDetailAdapter(Context context, List<MenuModel> list) {
+    public OrderDetailAdapter(Context context, List<MealModel> list) {
         this.context = context;
         this.list = list;
     }
@@ -46,12 +46,12 @@ public class OrderDetailAdapter extends BaseAdapter{
         } else {
             view = LayoutInflater.from(context).inflate(R.layout.order_detail_list_item, null);
         }
-        MenuModel menu = list.get(position);
+        MealModel menu = list.get(position);
         ViewHolder holder = new ViewHolder(view);
 
-        holder.name.setText(menu.getName());
-        holder.number.setText("x " + menu.getNum());
-        holder.price.setText("$ " + menu.getPrice());
+        holder.name.setText(menu.getMeal_name());
+        holder.number.setText("x " + menu.getCount());
+        holder.price.setText("$ " + menu.getMeal_price());
         return view;
     }
 

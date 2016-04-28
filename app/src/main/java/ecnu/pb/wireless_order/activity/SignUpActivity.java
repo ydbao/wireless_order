@@ -22,7 +22,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ecnu.pb.wireless_order.R;
 import ecnu.pb.wireless_order.database.AccountManager;
-import ecnu.pb.wireless_order.model.UserModel;
 import ecnu.pb.wireless_order.presenter.SignUpPresenter;
 import ecnu.pb.wireless_order.widget.ToastUtils;
 
@@ -124,11 +123,11 @@ public class SignUpActivity extends AppCompatActivity implements Validator.Valid
         String password = mPassword.getText().toString();
 
         if (verify.equals("123456")) {
-//            mPresenter.signUp(phone, name, password);
-            AccountManager.signup(this, mMobile.getText().toString(),
-                    mPassword.getText().toString(), mName.getText().toString());
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+            mPresenter.signUp(phone, name, password);
+//            AccountManager.signup(this, mMobile.getText().toString(),
+//                    mPassword.getText().toString(), mName.getText().toString());
+//            startActivity(new Intent(this, MainActivity.class));
+//            finish();
         } else {
             ToastUtils.showToast(this, "验证码不正确");
         }
@@ -136,11 +135,12 @@ public class SignUpActivity extends AppCompatActivity implements Validator.Valid
     }
 
     @Override
-    public void showView(UserModel userModel) {
-//        AccountManager.signup(this, mMobile.getText().toString(),
-//                mPassword.getText().toString(), mName.getText().toString());
-//        startActivity(new Intent(this, MainActivity.class));
-//        finish();
+    public void showView() {
+        ToastUtils.showToast(this, "注册成功");
+        AccountManager.signup(this, mMobile.getText().toString(),
+                mPassword.getText().toString(), mName.getText().toString());
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     @Override

@@ -10,6 +10,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ecnu.pb.wireless_order.R;
 import ecnu.pb.wireless_order.database.AccountManager;
+import ecnu.pb.wireless_order.database.MenuManager;
+import ecnu.pb.wireless_order.database.OrderManager;
 
 public class UserActivity extends AppCompatActivity {
 
@@ -21,6 +23,8 @@ public class UserActivity extends AppCompatActivity {
     @OnClick(R.id.txt_btn_signout)
     void OnSignOut() {
         AccountManager.signout(this);
+        OrderManager.clearOrder(this);
+        MenuManager.createInstance().clear(this);
         finish();
     }
 

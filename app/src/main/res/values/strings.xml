@@ -19,5 +19,6 @@
     <string name="title_place_order">确认订单</string>
 
     <string name="cellphone">电话号</string>
+    <string name="username">用户名</string>
     <string name="password">密码</string>
 </resources>

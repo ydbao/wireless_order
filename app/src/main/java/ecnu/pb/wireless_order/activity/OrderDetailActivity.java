@@ -16,10 +16,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import ecnu.pb.wireless_order.R;
 import ecnu.pb.wireless_order.adapter.OrderDetailAdapter;
-import ecnu.pb.wireless_order.database.MenuData;
-import ecnu.pb.wireless_order.model.MenuModel;
+import ecnu.pb.wireless_order.database.MenuManager;
+import ecnu.pb.wireless_order.database.OrderManager;
+import ecnu.pb.wireless_order.model.MealModel;
 import ecnu.pb.wireless_order.model.OrderModel;
-import ecnu.pb.wireless_order.widget.ToastUtils;
 
 public class OrderDetailActivity extends AppCompatActivity {
 
@@ -28,7 +28,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     private OrderModel orderModel = new OrderModel();
     private Bundle bundle;
-    private List<MenuModel> orderList = new ArrayList<>();
+    private List<MealModel> orderList = new ArrayList<>();
     private OrderDetailAdapter adapter;
 
     @Bind(R.id.txt_order_number)
@@ -54,11 +54,11 @@ public class OrderDetailActivity extends AppCompatActivity {
     }
 
     private void init() {
-        bundle = getIntent().getExtras();
+//        bundle = getIntent().getExtras();
 //        orderModel = (OrderModel) bundle.getSerializable(ORDER_DETAIL);
-        orderModel = new OrderModel(101123, "2016.4.1", 4, 0, 355, null);
-        if (orderModel != null) {
-            if (orderModel.getStatus() == 0 ) {
+//        orderModel = new OrderModel(101123, "2016.4.1", 4, 0, 355, null);
+//        if (orderModel != null) {
+//            if (orderModel.getStatus() == 0 ) {
                 mBtn.setText("结算");
                 mBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -66,27 +66,27 @@ public class OrderDetailActivity extends AppCompatActivity {
                         startActivity(new Intent(OrderDetailActivity.this, PayActivity.class));
                     }
                 });
-            } else {
-                mBtn.setText("再来一单");
-                mBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(OrderDetailActivity.this, PlaceOrderActivity.class);
-                        intent.putExtra(ORDER_AGAIN, bundle);
-                        startActivity(intent);
-                    }
-                });
-            }
-            mNumber.setText(orderModel.getId()+"");
-            mTime.setText(orderModel.getData());
-            mPeople.setText(orderModel.getPeople()+"人");
-            mTotal.setText(orderModel.getTotal()+"元");
+//            } else {
+//                mBtn.setText("再来一单");
+//                mBtn.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent = new Intent(OrderDetailActivity.this, PlaceOrderActivity.class);
+//                        intent.putExtra(ORDER_AGAIN, bundle);
+//                        startActivity(intent);
+//                    }
+//                });
+//            }
+            mNumber.setText(OrderManager.getOrderId(this)+"");
+            mTime.setText(OrderManager.getOrderDate(this));
+            mPeople.setText(OrderManager.getCount(this)+"人");
+            mTotal.setText(OrderManager.getOrderSum(this)+"元");
 //            orderList = orderModel.getList();
-            MenuData menuData = new MenuData();
-            orderList = menuData.getData();
-        } else {
-            ToastUtils.showToast(this, "null");
-        }
+//            MenuData menuData = new MenuData();
+            orderList = MenuManager.createInstance().getMenu(this);
+//        } else {
+//            ToastUtils.showToast(this, "null");
+//        }
 
         adapter = new OrderDetailAdapter(this, orderList);
         listView.setAdapter(adapter);

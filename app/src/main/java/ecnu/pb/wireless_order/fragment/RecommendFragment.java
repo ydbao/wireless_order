@@ -37,6 +37,7 @@ public class RecommendFragment extends Fragment implements MenuPresenter.View{
         super.onCreate(savedInstanceState);
         presenter = new MenuPresenter();
         presenter.attachView(this);
+        presenter.getMenu(0);
     }
 
     @Override
@@ -50,15 +51,15 @@ public class RecommendFragment extends Fragment implements MenuPresenter.View{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recommend, container, false);
         ButterKnife.bind(this, view);
-        mAdapter = new MenuFragmentAdapter(getActivity(), pics);
-        gridView.setAdapter(mAdapter);
+//        mAdapter = new MenuFragmentAdapter(getActivity(), pics);
+//        gridView.setAdapter(mAdapter);
         return view;
     }
 
     @Override
     public void showView(MenuModel menuModel) {
-//        mAdapter = new MenuFragmentAdapter(getActivity(), menuModel.getMealModels());
-//        gridView.setAdapter(mAdapter);
+        mAdapter = new MenuFragmentAdapter(getActivity(), menuModel.getMealModels());
+        gridView.setAdapter(mAdapter);
     }
 
     @Override

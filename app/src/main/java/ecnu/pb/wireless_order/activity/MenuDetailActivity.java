@@ -9,12 +9,15 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ecnu.pb.wireless_order.R;
-import ecnu.pb.wireless_order.model.MenuModel;
+import ecnu.pb.wireless_order.database.MenuManager;
+import ecnu.pb.wireless_order.model.MealModel;
+import ecnu.pb.wireless_order.widget.ToastUtils;
+import ecnu.pb.wireless_order.widget.VolleyLoadPicture;
 
 public class MenuDetailActivity extends AppCompatActivity {
 
     public static final String MENU_DETAIL = ".menu";
-    private MenuModel menuModel;
+    private MealModel mealModel;
 
     @Bind(R.id.img_background)
     ImageView imageView;
@@ -27,6 +30,7 @@ public class MenuDetailActivity extends AppCompatActivity {
 
     @OnClick(R.id.txt_btn_order)
     void OnClickOrder() {
+        MenuManager.createInstance().save(this, mealModel);
         finish();
     }
 
@@ -39,21 +43,22 @@ public class MenuDetailActivity extends AppCompatActivity {
     }
 
     private void init() {
-//        Bundle bundle = getIntent().getExtras();
-//        MealModel mealModel = bundle.getParcelable("menu");
-//        if (mealModel != null) {
-//            mName.setText(mealModel.getMeal_name());
-//            mPrice.setText(mealModel.getMeal_price());
-//            mIntro.setText(mealModel.getMeal_intro());
-//            imageView.setImageResource(photo);
-//        } else {
-//            ToastUtils.showToast(this, "null");
-//        }
-        int photo = getIntent().getIntExtra("photo", R.mipmap.img0);
-        int position = getIntent().getIntExtra("position", 1);
-        mName.setText("菜品"+position);
-        mPrice.setText("$ " + position + 10);
-        mIntro.setText("菜品特色介绍");
-        imageView.setImageResource(photo);
+        Bundle bundle = getIntent().getExtras();
+        mealModel = bundle.getParcelable("menu");
+        if (mealModel != null) {
+            mName.setText(mealModel.getMeal_name());
+            mPrice.setText("$"+mealModel.getMeal_price());
+            mIntro.setText(mealModel.getMeal_intro());
+            VolleyLoadPicture vlp = new VolleyLoadPicture(this, imageView);
+            vlp.getmImageLoader().get(mealModel.getMeal_image_url(), vlp.getOne_listener());
+        } else {
+            ToastUtils.showToast(this, "null");
+        }
+//        int photo = getIntent().getIntExtra("photo", R.mipmap.img0);
+//        int position = getIntent().getIntExtra("position", 1);
+//        mName.setText("菜品"+position);
+//        mPrice.setText("$ " + position + 10);
+//        mIntro.setText("菜品特色介绍");
+//        imageView.setImageResource(photo);
     }
 }

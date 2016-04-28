@@ -10,19 +10,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import ecnu.pb.wireless_order.R;
-import ecnu.pb.wireless_order.model.MenuModel;
+import ecnu.pb.wireless_order.model.MealModel;
+import ecnu.pb.wireless_order.widget.VolleyLoadPicture;
 
 public class PlaceOrderAdapter extends BaseAdapter {
 
     private Context context;
-    private List<MenuModel> list;
+    private List<MealModel> list = new ArrayList<>();
 
-    public PlaceOrderAdapter(Context context, List<MenuModel> list) {
+    public PlaceOrderAdapter(Context context, List<MealModel> list) {
         this.context = context;
         this.list = list;
     }
@@ -50,26 +52,29 @@ public class PlaceOrderAdapter extends BaseAdapter {
         } else {
             view = LayoutInflater.from(context).inflate(R.layout.place_list_item, null);
         }
-        final MenuModel menu = list.get(position);
+        final MealModel menu = list.get(position);
         final ViewHolder holder = new ViewHolder(view);
-        holder.name.setText(menu.getName());
-        holder.number.setText("x " + menu.getNum());
-        holder.price.setText("$ " + menu.getPrice());
-        holder.photo.setImageResource(menu.getPhoto());
+        holder.name.setText(menu.getMeal_name());
+        holder.number.setText("x " + menu.getCount());
+        holder.price.setText("$ " + menu.getMeal_price());
+        VolleyLoadPicture vlp = new VolleyLoadPicture(context, holder.photo);
+        vlp.getmImageLoader().get(menu.getMeal_image_url(), vlp.getOne_listener());
         holder.addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                menu.setNum(list.get(position).getNum() + 1);
-                holder.number.setText("x " + menu.getNum());
+                int number = menu.getCount() + 1;
+                holder.number.setText("x " + number);
+                list.get(position).setCount(number);
             }
         });
 
         holder.minBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (list.get(position).getNum() > 1) {
-                    menu.setNum(list.get(position).getNum() - 1);
-                    holder.number.setText("x " + menu.getNum());
+                if (list.get(position).getCount() > 1) {
+                    int number = menu.getCount() - 1;
+                    holder.number.setText("x " +number);
+                    list.get(position).setCount(number);
                 } else {
                     new AlertDialog.Builder(context)
                             .setTitle("提示")
@@ -80,7 +85,6 @@ public class PlaceOrderAdapter extends BaseAdapter {
                 }
             }
         });
-
         return view;
     }
 

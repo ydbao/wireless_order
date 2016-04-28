@@ -54,4 +54,12 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/pay_bill"
+        style="@style/Button.ActionSheet.Blue"
+        android:layout_gravity="bottom"
+        android:text="支付"
+        />
+
+
 </LinearLayout>

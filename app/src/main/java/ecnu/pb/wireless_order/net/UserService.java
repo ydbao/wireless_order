@@ -6,10 +6,10 @@ import retrofit.http.Path;
 
 public interface UserService {
 
-    @POST("/UserLoginServlet")
+    @POST("/UserLoginServlet/")
     UserModel signin(@Path("userName") String name, @Path("password") String password);
 
-    @POST("/UserRegServlet")
+    @POST("/UserRegServlet/")
     UserModel signup(@Path("userName") String name, @Path("password") String password,
                      @Path("phone") String phone);
 }

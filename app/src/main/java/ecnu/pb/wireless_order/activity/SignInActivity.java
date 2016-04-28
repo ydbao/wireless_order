@@ -19,7 +19,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ecnu.pb.wireless_order.R;
 import ecnu.pb.wireless_order.database.AccountManager;
-import ecnu.pb.wireless_order.model.UserModel;
 import ecnu.pb.wireless_order.presenter.SignInPresenter;
 import ecnu.pb.wireless_order.widget.ToastUtils;
 
@@ -28,8 +27,8 @@ public class SignInActivity extends AppCompatActivity implements Validator.Valid
     private Validator validator;
     private SignInPresenter mPresenter;
 
-    @NotEmpty(messageResId = R.string.error_mobile_required)
-    @Length(min = 11, max = 11, messageResId = R.string.error_invalid_mobile, sequence = 0)
+    @NotEmpty(messageResId = R.string.error_username)
+    @Length(min = 0, max = 12, messageResId = R.string.error_invalid_name, sequence = 0)
     @Bind(R.id.et_mobile)
     EditText mMobile;
 
@@ -69,10 +68,10 @@ public class SignInActivity extends AppCompatActivity implements Validator.Valid
 
     @Override
     public void onValidationSucceeded() {
-//        mPresenter.signIn( mMobile.getText().toString(), mPassword.getText().toString());
-        ToastUtils.showToast(this, "登陆成功");
-        AccountManager.signin(this, mMobile.getText().toString(), mPassword.getText().toString());
-        finish();
+        mPresenter.signIn( mMobile.getText().toString(), mPassword.getText().toString());
+//        ToastUtils.showToast(this, "登陆成功");
+//        AccountManager.signin(this, mMobile.getText().toString(), mPassword.getText().toString());
+//        finish();
     }
 
     @Override
@@ -83,10 +82,10 @@ public class SignInActivity extends AppCompatActivity implements Validator.Valid
     }
 
     @Override
-    public void showView(UserModel userModel) {
-//        ToastUtils.showToast(this, "登陆成功");
-//        AccountManager.signin(this, mMobile.getText().toString(), mPassword.getText().toString());
-//        finish();
+    public void showView() {
+        ToastUtils.showToast(this, "登陆成功");
+        AccountManager.signin(this, mMobile.getText().toString(), mPassword.getText().toString());
+        finish();
     }
 
     @Override

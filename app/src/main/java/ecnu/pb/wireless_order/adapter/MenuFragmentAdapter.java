@@ -2,6 +2,7 @@ package ecnu.pb.wireless_order.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import ecnu.pb.wireless_order.R;
 import ecnu.pb.wireless_order.activity.MenuDetailActivity;
+import ecnu.pb.wireless_order.database.MenuManager;
 import ecnu.pb.wireless_order.model.MealModel;
-import ecnu.pb.wireless_order.widget.ToastUtils;
+import ecnu.pb.wireless_order.widget.VolleyLoadPicture;
 
 public class MenuFragmentAdapter extends BaseAdapter {
 
@@ -36,24 +38,24 @@ public class MenuFragmentAdapter extends BaseAdapter {
 
     private List<MealModel> mealModels = new ArrayList<>();
 
-//    public MenuFragmentAdapter(Context context, List<MealModel> mealModels) {
-//        this.context = context;
-//        this.mealModels = mealModels;
-//    }
+    public MenuFragmentAdapter(Context context, List<MealModel> mealModels) {
+        this.context = context;
+        this.mealModels = mealModels;
+    }
 
     @Override
     public int getCount() {
 
-//        return mealModels.size();
-        return pics.length;
+        return mealModels.size();
+//        return pics.length;
 
     }
 
     @Override
     public Object getItem(int position) {
 
-//        return mealModels.get(position);
-        return pics[position];
+        return mealModels.get(position);
+//        return pics[position];
     }
 
     @Override
@@ -70,31 +72,28 @@ public class MenuFragmentAdapter extends BaseAdapter {
             view = LayoutInflater.from(context).inflate(R.layout.menu_item, null);
         }
 
-//        final MealModel mealModel = mealModels.get(position);
+        final MealModel mealModel = mealModels.get(position);
 
         ViewHolder holder = new ViewHolder(view);
-        holder.imageView.setImageResource(pics[position]);
+
+        VolleyLoadPicture vlp = new VolleyLoadPicture(context, holder.imageView);
+        vlp.getmImageLoader().get(mealModel.getMeal_image_url(), vlp.getOne_listener());
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, MenuDetailActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putParcelable("menu", mealModel);
-//                intent.putExtras(bundle);
-                intent.putExtra("photo", pics[position]);
-                intent.putExtra("position", position);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("menu", mealModel);
+                intent.putExtras(bundle);
                 context.startActivity(intent);
-                ToastUtils.showToast(context, "" + position);
             }
         });
-//        holder.name.setText(mealModel.getMeal_name());
-//        holder.price.setText(mealModel.getMeal_price());
-        holder.name.setText("菜品"+position);
-        holder.price.setText("$ " + position + 10);
+        holder.name.setText(mealModel.getMeal_name());
+        holder.price.setText("$" + mealModel.getMeal_price());
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ToastUtils.showToast(context, "" + position);
+                MenuManager.createInstance().save(context, mealModel);
             }
         });
         return view;

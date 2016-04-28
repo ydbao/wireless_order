@@ -16,6 +16,7 @@ import ecnu.pb.wireless_order.activity.MenuActivity;
 import ecnu.pb.wireless_order.activity.OrderDetailActivity;
 import ecnu.pb.wireless_order.activity.PayActivity;
 import ecnu.pb.wireless_order.activity.PlaceOrderActivity;
+import ecnu.pb.wireless_order.database.OrderManager;
 
 public class OrderAdapter extends BaseAdapter implements View.OnClickListener {
 
@@ -29,12 +30,14 @@ public class OrderAdapter extends BaseAdapter implements View.OnClickListener {
 
     @Override
     public int getCount() {
-        return status.length;
+        return 1;
+//        return status.length;
     }
 
     @Override
     public Object getItem(int position) {
-        return status[position];
+        return position;
+//        return status[position];
     }
 
     @Override
@@ -52,17 +55,21 @@ public class OrderAdapter extends BaseAdapter implements View.OnClickListener {
         }
 
         ViewHolder holder = new ViewHolder(view);
-        holder.txtStatus.setText(status[position]);
-        if (status[position].equals("订单已完成")) {
+        if (OrderManager.getOrderStatus(context) == 1) {
+            holder.txtStatus.setText(status[1]);
             holder.btnMore.setVisibility(View.VISIBLE);
             holder.btnOrder.setVisibility(View.GONE);
             holder.btnPay.setVisibility(View.GONE);
         } else {
+            holder.txtStatus.setText(status[0]);
             holder.btnPay.setVisibility(View.VISIBLE);
             holder.btnMore.setVisibility(View.GONE);
             holder.btnOrder.setVisibility(View.VISIBLE);
         }
 
+        holder.txtNumber.setText(OrderManager.getOrderId(context) + "");
+        holder.txtTime.setText(OrderManager.getOrderDate(context));
+        holder.txtTotal.setText(OrderManager.getOrderSum(context) + "");
         holder.btnOrder.setOnClickListener(this);
         holder.btnMore.setOnClickListener(this);
         holder.btnPay.setOnClickListener(this);
